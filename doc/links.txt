@@ -1,0 +1,11 @@
+# Tun/Tap interface tutorial
+https://backreference.org/2010/03/26/tuntap-interface-tutorial/
+
+# Writing ethernet packets on OS X and BSD
+https://www.vankuik.nl/2012-02-09_Writing_ethernet_packets_on_OS_X_and_BSD
+
+# Using FreeBSD’s BPF device with C/C++
+http://bastian.rieck.ru/blog/posts/2009/bpf/
+
+# Beej's Guide to Network Programming
+http://beej.us/guide/bgnet/html/multi/index.html
