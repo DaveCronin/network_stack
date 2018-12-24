@@ -10,6 +10,8 @@
 #include <unistd.h> // for close
 #include <errno.h>
 
+#include <linux/if_ether.h>
+
 #define CLONE_DEVICE "/dev/net/tun"
 #define ETHER_FAMILY 1
 
@@ -25,7 +27,7 @@
  */
 #define FORMATTED_MAC_ADDR_SIZE 18
 void format_mac_addr(char *data, char *formatted) {
-  sprintf(formatted, "%02X:%02X:%02X:%02X:%02X:%02X\0",
+  sprintf(formatted, "%02x:%02x:%02x:%02x:%02x:%02x\0",
          (unsigned char) data[0],
          (unsigned char) data[1],
          (unsigned char) data[2],
@@ -192,6 +194,42 @@ int change_ipv4_addr(char *dev, struct in_addr *addr,
   return 0;
 }
 
+/*
+  Struct for storing the current location of the parser in the message.
+  This struct should only be used in conjunction with strict functions 
+  that will update the remaining length when it changes the position.
+ */
+struct packet {
+  char *pos;                       // current byte
+  unsigned int remaining_length;   // remaining number of bytes 
+};
+
+/*
+  args: The packet struct being modified.
+        The number of bytes that we want to advance in the packet.
+
+        The idea of this function is to confirm that there are enough
+        remaining bytes in the packet to advance the amount specified,
+        and then update the packet struct to reflect this advance
+        if possible. 
+
+        Returns the pointer to the original position so that the data
+        at that part of the message can be processed, or NULL if there 
+        is not enough data.
+ */
+
+char* advance_pos(struct packet *packet, int n_bytes) {
+  if (n_bytes <= packet->remaining_length) {
+    char *curr_pos = packet->pos;
+    packet->pos += n_bytes;
+    packet->remaining_length -= n_bytes;
+    return curr_pos;
+  }
+  return NULL;
+}
+ 
+
+
 int main() {
   int tap_fd;
   char tap_name[IFNAMSIZ];
@@ -216,7 +254,6 @@ int main() {
     printf("error code: %d\n", x);
   }
   else {
-    getchar();
     char buffer[1500];
     while(1) {
     /* Note that "buffer" should be at least the MTU size of the interface, eg 1500 bytes */
@@ -226,10 +263,29 @@ int main() {
         close(tap_fd);
         return -1;
       }
-
-      /* Do whatever with the data */
+      
       printf("Read %d bytes from device %s\n", bytes_read, tap_name);
-      //      printf("%02X:%02X:%02X:%02X", buffer[0], buffer[1], buffer[2], buffer[3]);
+
+      struct packet packet;
+      packet.pos = buffer;
+      packet.remaining_length = bytes_read;
+      
+      char *x = advance_pos(&packet, sizeof(struct ethhdr));
+      if(x == NULL) {
+        printf("Not enough bytes for an ethernet header\n");
+      }
+      // Cast the 
+      struct ethhdr *eth_header = (struct ethhdr *)x;
+      eth_header->h_proto = ntohs(eth_header->h_proto);
+      
+      char dst_mac_addr[FORMATTED_MAC_ADDR_SIZE];
+      char src_mac_addr[FORMATTED_MAC_ADDR_SIZE];
+      format_mac_addr(eth_header->h_dest, dst_mac_addr);
+      format_mac_addr(eth_header->h_source, src_mac_addr);
+      printf("Destination: %s\nSource: %s\nType: %04x\n",
+             dst_mac_addr, src_mac_addr, eth_header->h_proto);
+      
+      
     }
   }
   return 0;
