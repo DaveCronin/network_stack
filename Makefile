@@ -6,7 +6,9 @@ SHELL=/usr/bin/env bash
 
 C_FILES=$(SOURCE_DIR)/main.c \
 	$(SOURCE_DIR)/tuntap.c \
-	$(SOURCE_DIR)/utils.c
+	$(SOURCE_DIR)/utils.c \
+	$(SOURCE_DIR)/ethernet.c \
+	$(SOURCE_DIR)/arp.c
 
 
 # Output Colours. Must reset to plain or the rest of the terminal

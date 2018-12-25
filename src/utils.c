@@ -1,15 +1,15 @@
-#include <stdio.h> // sprintf and NULL
-
+#include "common.h"
 #include "utils.h"
 
 void format_mac_addr(char *data, char *formatted) {
-  sprintf(formatted, "%02x:%02x:%02x:%02x:%02x:%02x\0",
-         (unsigned char) data[0],
-         (unsigned char) data[1],
-         (unsigned char) data[2],
-         (unsigned char) data[3],
-         (unsigned char) data[4],
-         (unsigned char) data[5]);
+  snprintf(formatted, FORMATTED_MAC_ADDR_SIZE,
+          "%02x:%02x:%02x:%02x:%02x:%02x\0",
+          (unsigned char) data[0],
+          (unsigned char) data[1],
+          (unsigned char) data[2],
+          (unsigned char) data[3],
+          (unsigned char) data[4],
+          (unsigned char) data[5]);
 }
 
 

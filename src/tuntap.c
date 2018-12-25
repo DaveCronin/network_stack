@@ -1,14 +1,12 @@
-#include <stdio.h> // printf
 #include <sys/ioctl.h> // ioctl
 #include <sys/socket.h> // socket
 #include <netinet/in.h> // sockaddr_in, in_adr
-#include <string.h> // strncpy
 #include <fcntl.h> // for open
 #include <unistd.h> // for close, read
-#include <errno.h>
+
 #include <arpa/inet.h> // hton, ntoh
 
-
+#include "common.h"
 #include "tuntap.h"
 #include "utils.h"
 
