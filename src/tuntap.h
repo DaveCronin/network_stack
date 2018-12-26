@@ -9,7 +9,6 @@
 #include <linux/if_tun.h> // TUNSETIFF etc, 
 
 #define CLONE_DEVICE "/dev/net/tun"
-#define ETHER_FAMILY 1
 
 /* 
    args: pointer to buffer with device name,

@@ -19,7 +19,7 @@ int main() {
     return -1;
   }
 
-  char mac_addr[6] = {0xDE, 0xAB, 0x12, 0x0A, 0xD1, 0xCF};
+  char mac_addr[MAC_ADDR_SIZE] = {0xDE, 0xAB, 0x12, 0x0A, 0xD1, 0xCF};
 
   if (change_mac_addr( tap_fd, mac_addr)) {
     return -1;
@@ -51,8 +51,8 @@ int main() {
       packet.pos = buffer;
       packet.remaining_length = bytes_read;
 
-      int x = parse_ethernet_frame(&packet);
-      printf("%d bytes remaining.\n", packet.remaining_length);
+      int x = parse_ethernet_frame(tap_fd, &packet);
+      assert(packet.remaining_length == 0 && "Trailing bytes..\n");
     }
   }
   return 0;

@@ -27,7 +27,7 @@ build:
 
 # Can use if defined TRACE to include extra tracing in debug builds
 debug:
-	$(CXX) $(C_FILES) -o $(DEBUG_BINARY) -g -DTRACE
+	$(CXX) $(C_FILES) -o $(BUILD_DIR)/$(BINARY) -g -DTRACE
 
 clean:
 	rm -f $(BUILD_DIR)/*

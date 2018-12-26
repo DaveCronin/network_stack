@@ -64,7 +64,7 @@ int change_mac_addr(int fd, char* addr) {
   }
 
   // Copy the new MAC address to the struct
-  strncpy(ifr.ifr_hwaddr.sa_data, addr, 6);
+  strncpy(ifr.ifr_hwaddr.sa_data, addr, MAC_ADDR_SIZE);
   ifr.ifr_hwaddr.sa_family = ETHER_FAMILY;
 
   // Set the new MAC address

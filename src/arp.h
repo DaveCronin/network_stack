@@ -3,6 +3,9 @@
 
 #include <linux/types.h>
 
+#define ARP_REQUEST 1
+#define ARP_REPLY 2
+
 struct arp_hdr {
   uint16_t	hw_proto; 
   uint16_t	req_proto;
