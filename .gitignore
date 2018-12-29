@@ -1,2 +1,5 @@
 # ignore the build directory since the Makefile will create one
 bld/
+
+# appeared when I was using network sharing
+.AppleDouble
