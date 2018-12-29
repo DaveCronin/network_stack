@@ -157,7 +157,7 @@ int handle_arp_message(struct arp_hdr *arp_header,
   if(!merge_flag) {
     if(*curr_entry != NULL) {
       while((*curr_entry)->next != NULL) {
-        *curr_entry = &(entry->next);
+        curr_entry = &(entry->next);
       }
     }
     struct arp_table_entry * new_entry = (struct arp_table_entry*) malloc(sizeof(struct arp_table_entry));
